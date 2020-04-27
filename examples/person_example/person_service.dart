@@ -84,8 +84,8 @@ List<Map<String, dynamic>> people = [
     "likesToCode": false
   },{
     "id": 5,
-    "name": "armella Zenko",
-    "age": 13,
+    "name": "Carmella Zenko",
+    "age": 12,
     "likesToCode": true
   }
 ];

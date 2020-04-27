@@ -1,6 +1,6 @@
 class Injectable {
-  final Symbol constructorName;
-  const Injectable([this.constructorName = Symbol.empty]);
+  final String constructorName;
+  const Injectable([this.constructorName = ""]);
 }
 
 class Inject {
