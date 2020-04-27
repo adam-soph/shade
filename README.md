@@ -132,4 +132,4 @@ void main() {
 }
 ```
 ## Examples
-See an example in action [here](./xamples).
+See an example in action [here](./examples).
