@@ -36,13 +36,13 @@ abstract class ImplementationOfService extends Service {
     ...
 }
 
-@Injectable("constructor")
+@Injectable()
 @Controller()
 class ExampleController {
 
     final Service service;
 
-    const ExampleController.constructor(@Inject("TokenForService") this.service);
+    const ExampleController(@Inject("TokenForService") this.service);
 
     @Get("/example")
     void getExample(State state, Request req, Response res, Step step) {
