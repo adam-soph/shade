@@ -56,8 +56,7 @@ class ExampleController {
 }
 ```
 ## Middleware
-You can define Middleware to be a single function or as an instance of middleware. Functional middleware is static where as instances of middleware can have dependencies injected into them or can be instantiated manually when annotated or added at the Application level. 
-### Functional Middleware
+You can define Middleware to be a single function or as an instance of `Middleware`. Functional middleware is static where as instances of `Middleware` can have dependencies injected into them or can be instantiated manually when annotated.
 ```dart
 void middleware(State state, Request req, Response res, Step step) {
     state.putLocal("local", "some value for local.");
@@ -133,4 +132,4 @@ void main() {
 }
 ```
 ## Examples
-See more examples in the "examples" directory.
+See an example in action [here](./xamples).
