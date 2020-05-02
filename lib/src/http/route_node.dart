@@ -1,16 +1,21 @@
 import 'package:shade/src/utilities/pair.dart';
 import 'route_step.dart';
 
+/// The result of a [RouteNode]'s [climb] function.
+/// 
+/// If match is `false` then [routeNode], [pathParameters], and [path] will be `null`.
 class ClimbResult {
 
   final bool match;
   final RouteNode routeNode;
+  final String path;
   final Map<String, String> pathParameters;
 
-  const ClimbResult(this.match, this.routeNode, this.pathParameters);
+  const ClimbResult(this.match, this.routeNode, this.path, this.pathParameters);
 
 }
 
+/// A node in a [Router]'s tree.
 class RouteNode {
 
   Map<String, Iterable<RouteStep>> endpoints;
@@ -25,30 +30,33 @@ class RouteNode {
   }
 
 
-  ClimbResult climb(Iterator<String> segments, Map<String, String> pathParameters) {
+  ClimbResult climb(Iterator<String> segments, Map<String, String> pathParameters, StringBuffer path) {
     
     if (!segments.moveNext()) {
-      return ClimbResult(true, this, pathParameters);
+      return ClimbResult(true, this, path.toString(), pathParameters);
     }
 
     var currentSegment = segments.current;
 
     for (var literal in this.literalChildren.keys) {
       if (literal == currentSegment) {
-        return this.literalChildren[literal].climb(segments, pathParameters);
+        path.write("/" + literal);
+        return this.literalChildren[literal].climb(segments, pathParameters, path);
       }
     }
 
     if (this.variableChild != null) {
+      path.write("/:" + this.variableChild.left);
       pathParameters[this.variableChild.left] = currentSegment;
-      return this.variableChild.right.climb(segments, pathParameters);
+      return this.variableChild.right.climb(segments, pathParameters, path);
     }
 
     if (this.catchAllChild != null) {
-      return ClimbResult(true, this.catchAllChild, pathParameters);
+      path.write("/*");
+      return ClimbResult(true, this.catchAllChild, path.toString(), pathParameters);
     }
 
-    return ClimbResult(false, null, null);
+    return ClimbResult(false, null, null, null);
   }
 
 }

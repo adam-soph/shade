@@ -2,17 +2,24 @@ import 'package:shade/src/utilities/pair.dart';
 
 import 'route_step.dart';
 import 'errors.dart';
-import 'route_segment_type.dart';
 import 'route_node.dart';
 
+enum _RouteSegmentType {
+  LITERAL, CATCHALL, VARIABLE
+}
+
+/// The result of a [Router]'s [route] function.
+/// 
+/// If [matchPath] is `false` then so will [matchEndpoint] and [chain], [path], and [pathParameters] will be null.
 class RouteResult {
 
   final bool matchPath;
   final bool matchEndpoint;
   final Iterator<RouteStep> chain;
+  final String path;
   final Map<String, String> pathParameters;
 
-  const RouteResult(this.matchPath, this.matchEndpoint, this.chain, this.pathParameters);
+  const RouteResult(this.matchPath, this.matchEndpoint, this.chain, this.path, this.pathParameters);
 
 }
 
@@ -26,7 +33,7 @@ class Router {
     this._head = RouteNode();
   }
 
-  void addRoute(String path, String httpMethod, List<RouteStep> chain) {
+  void addRoute(String path, String httpMethod, Iterable<RouteStep> chain) {
 
     path = this._washPath(path); 
     httpMethod = this._washHttpMethod(httpMethod);
@@ -40,14 +47,14 @@ class Router {
       var node = RouteNode();
       
       switch(segmentType) {
-        case RouteSegmentType.LITERAL:
+        case _RouteSegmentType.LITERAL:
           if (cur.literalChildren.containsKey(segment)) {
             node = cur.literalChildren[segment];
           } else {
             cur.literalChildren[segment] = node;
           }
           break;
-        case RouteSegmentType.CATCHALL:
+        case _RouteSegmentType.CATCHALL:
           if (cur.catchAllChild != null) {
             throw RouteConfigurationError("Duplicate route with path ${path} and method ${httpMethod}."); // duplicate route
           }
@@ -56,7 +63,7 @@ class Router {
           }
           cur.catchAllChild = node;
           break;
-        case RouteSegmentType.VARIABLE:
+        case _RouteSegmentType.VARIABLE:
           if (cur.variableChild != null) {
             if (cur.variableChild.left != segment.substring(1)) {
               throw RouteConfigurationError("Duplicate route with path ${path} and method ${httpMethod}."); // duplicate route
@@ -77,13 +84,13 @@ class Router {
     }
   }
 
-  RouteSegmentType _getSegmentType(String segment) {
+  _RouteSegmentType _getSegmentType(String segment) {
     if (segment.startsWith(":")) {
-      return RouteSegmentType.VARIABLE;
+      return _RouteSegmentType.VARIABLE;
     } else if (segment == "*") {
-      return RouteSegmentType.CATCHALL;
+      return _RouteSegmentType.CATCHALL;
     } else if (this._alphanumeric.hasMatch(segment)) {
-      return RouteSegmentType.LITERAL;
+      return _RouteSegmentType.LITERAL;
     }  else {
       throw RouteConfigurationError("Invlaid path segment ${segment}");
     }
@@ -103,19 +110,21 @@ class Router {
     return httpMethod.toUpperCase();
   }
 
+  /// Gets the route result of specific [segements] and [httpMethod] from the constructed
+  /// [RouteNode] tree.
   RouteResult route(Iterator<String> segments, String httpMethod) {
-    var result = this._head.climb(segments, {});
+    var result = this._head.climb(segments, {}, StringBuffer());
     if (result.match) {
       var endpoint = result.routeNode.endpoints[httpMethod];
       if (endpoint == null) {
         if (result.routeNode.catchAllEndpoint != null) {
-          return RouteResult(true, true, result.routeNode.catchAllEndpoint.iterator, result.pathParameters);
+          return RouteResult(true, true, result.routeNode.catchAllEndpoint.iterator, result.path, result.pathParameters);
         }
-        return RouteResult(true, false, null, result.pathParameters);
+        return RouteResult(true, false, null, result.path, result.pathParameters);
       }
-      return RouteResult(true, true, endpoint.iterator, result.pathParameters);
+      return RouteResult(true, true, endpoint.iterator, result.path, result.pathParameters);
     }
-    return RouteResult(false, false, null, result.pathParameters);
+    return RouteResult(false, false, null, result.path, result.pathParameters);
   }
 
 }

@@ -13,7 +13,7 @@ class PersonController {
   PersonController(@Inject("PersonService") this.service);
 
   @Get()
-  void getAllPeople(State state, Request req, Response res, Step step) {
+  void getAllPeople(Request req, Response res, Step step) {
     this.service.getAllPeople().then((people) {
       res.sendJson(people);
       step();
@@ -21,8 +21,8 @@ class PersonController {
   }
 
   @Post()
-  void createPerson(State state, Request req, Response res, Step step) {
-    var json = state.getLocal("json");
+  void createPerson(Request req, Response res, Step step) {
+    var json = res.state["json"];
     this.service.createPerson(json["id"], json["name"], json["age"], json["likeToCode"]).then((_) {
       res.sendJson({
         "message": "success!"
@@ -32,8 +32,8 @@ class PersonController {
   }
 
   @Get("/:personId")
-  void getPerson(State state, Request req, Response res, Step step) {
-    var id = int.parse(req.getPathParameter("personId"));
+  void getPerson(Request req, Response res, Step step) {
+    var id = int.parse(req.pathParameters["personId"]);
     this.service.getPerson(id).then((person) {
       res.sendJson(person);
       step();
@@ -41,9 +41,9 @@ class PersonController {
   }
 
   @Patch("/:personId")
-  void patchPerson(State state, Request req, Response res, Step step) {
-    var id = int.parse(req.getPathParameter("personId"));
-    var json = state.getLocal("json");
+  void patchPerson(Request req, Response res, Step step) {
+    var id = int.parse(req.pathParameters["personId"]);
+    var json = res.state["json"];
     this.service.patchPerson(id, name: json["name"], age: json["age"], likesToCode: json["likesToCode"]).then((person) {
       res.sendJson({
         "message": "success!"
@@ -53,9 +53,9 @@ class PersonController {
   }
 
   @Put("/:personId")
-  void putPerson(State state, Request req, Response res, Step step) {
-    var json = state.getLocal("json");
-    var id = int.parse(req.getPathParameter("personId"));
+  void putPerson(Request req, Response res, Step step) {
+    var json = res.state["json"];
+    var id = int.parse(req.pathParameters["personId"]);
     this.service.putPerson(id, json["name"], json["age"], json["likesToCode"]).then((_) {
       res.sendJson({
         "message": "success!"
@@ -65,8 +65,8 @@ class PersonController {
   }
 
   @Delete("/:personId")
-  void deletePerson(State state, Request req, Response res, Step step) { 
-    var id = int.parse(req.getPathParameter("personId"));
+  void deletePerson(Request req, Response res, Step step) { 
+    var id = int.parse(req.pathParameters["personId"]);
     this.service.deletePerson(id).then((_) {
       res.sendJson({
         "message": "success!"

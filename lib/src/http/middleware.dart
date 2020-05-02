@@ -1,22 +1,25 @@
 import 'dart:convert';
 
 import 'route_step.dart';
-import 'state.dart';
-import 'request.dart';
-import 'response.dart';
+import 'context.dart';
 
+/// The definition of a middleware object.
+/// 
+/// This is meant to be used as an interface.
+/// 
+/// If your middleware doesn't require dependencies or parameters it is recommended that you just use a [RouteStep].
 abstract class Middleware {
 
-  void step(State state, Request req, Response res, Step step);
+  void step(Request req, Response res, Step step);
 
 }
 
-void JsonBodyParser(State state, Request req, Response res, Step step) {
-  utf8.decoder.bind(req.stream).join().then((content) {
+void JsonBodyParser(Request req, Response res, Step step) {
+  utf8.decoder.bind(req.data).join().then((content) {
     print(content);
     var jsonBody = json.decode(content);
-    state.putLocal("json", jsonBody);
+    res.state["json"] = jsonBody;
   }).catchError((err) {
-    state.putLocal("json", {});
+    res.state["json"] = Map<String, dynamic>();
   }).then((_) => step());
 }

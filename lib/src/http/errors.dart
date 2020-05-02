@@ -1,3 +1,4 @@
+/// Thrown during [ApplicationBuilder]'s `build` function if the routes are misconfigured.
 class RouteConfigurationError extends Error {
   
   final String message;
@@ -7,6 +8,3 @@ class RouteConfigurationError extends Error {
   String toString() => this.message != null ? "RouteConfigurationError: $message" : "RouteConfigurationError";
 
 }
-
-
-

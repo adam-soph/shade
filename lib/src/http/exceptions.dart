@@ -1,3 +1,5 @@
+/// Thrown to the [Application]'s error handler when the request path or method doesn't match
+/// one of the created routes.
 class RouteNotFoundException implements Exception {
   
   final String path;
