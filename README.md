@@ -1,5 +1,24 @@
 # shade
 A fast and flexible Microservice oriented HTTP server framework for dart.
+## Installing
+### Depend on it
+Add this to your package's pubspec.yaml file:
+```yaml
+dependencies:
+  shade: ^0.1.3
+```
+### Install it
+You can install packages from the command line:
+
+with pub:
+```bash
+pub get
+```
+### Import it
+Now in your Dart code, you can use:
+```dart
+import 'package:shade/shade.dart';
+```
 ## Dependency Injection
 Shade has a buil-in flexible dependency injector. Using the `Injectable` annotation you can define the name of the constructor that is being injected into.
 ```dart
