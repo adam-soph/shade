@@ -1,6 +1,4 @@
-/// The core library for Shade.
-/// 
-/// Exports `http` and `inject`.
+/// The core library for shade.
 library shade;
 
 export 'src/inject/inject.dart';
