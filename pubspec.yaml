@@ -1,0 +1,4 @@
+name: shade
+version: 0.1.0
+description:  A fast and flexible Microservice oriented HTTP Server framework for dart.
+homepage: 
