@@ -1,5 +1,5 @@
 # shade
-A fast and flexible Microservice oriented HTTP Server framework for dart.
+A fast and flexible Microservice oriented HTTP server framework for dart.
 ## Dependency Injection
 Shade has a buil-in flexible dependency injector. Using the `Injectable` annotation you can define the name of the constructor that is being injected into.
 ```dart
@@ -139,4 +139,4 @@ void main() {
 }
 ```
 ## Examples
-See an example in action [here](https://www.github.com/warix-io/shade/example).
+See an example in action [here](https://github.com/adam-soph/shade/tree/master/example).
