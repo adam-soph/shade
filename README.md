@@ -39,7 +39,7 @@ class ExampleController {
     const ExampleController(@Inject("TokenForService") this.service);
 
     @Get("/example")
-    void getExample(State state, Request req, Response res, Step step) {
+    void getExample(Request req, Response res, Step step) {
         ...
     }
 }
@@ -73,7 +73,7 @@ Middleware is execution of Application level middleware -> Controller level midd
 You can define Middleware to be a single function or as an instance of `Middleware`. Functional middleware is static where as instances of `Middleware` can have dependencies injected into them or can be instantiated manually when annotated or added with parameters.
 ### Functional Middleware
 ```dart
-void middlewareFunc(State state, Request req, Response res, Step step) {
+void middlewareFunc(Request req, Response res, Step step) {
     state.putLocal("local", "some value for local.");
     step(); // Moves to next RouteStep
 }
@@ -89,7 +89,7 @@ class SomeMiddleware extends Middleware {
     const SomeMiddleware(@Inject("TokenForService") this.service);
 
     @override
-    void step(State state, Request req, Response res, Step step) {
+    void step(Request req, Response res, Step step) {
         int someValue = this.service.calculate();
         state.putLocal("local", someValue);
         step(); // Moves to next RouteStep
@@ -104,7 +104,7 @@ class SomeOtherMiddleware extends Middleware {
     const SomeMiddleware(this.parameter);
 
     @override
-    void step(State state, Request req, Response res, Step step) {
+    void step(Request req, Response res, Step step) {
         state.putLocal("local", this.parameter);
         step(); // Moves to next RouteStep
     }
@@ -122,7 +122,7 @@ class ExampleController {
     @Get("/example")
     @Postware(SomeMiddleware) // Execute middleware right after this endpoint
     @Preware([middleware, SomeOtherMiddleware("someParameter")]) // Execute all middleware in order just before this endpoint
-    void getExample(State state, Request req, Response res, Step step) {
+    void getExample(Request req, Response res, Step step) {
         ...
     }
 
