@@ -5,7 +5,6 @@ class Pair<L, R> {
   const Pair(this.left, this.right);
 
   bool operator ==(Object o) {
-    print(o is Pair<L, R> && o.left == this.left && o.right == this.right);
     return o is Pair<L, R> && o.left == this.left && o.right == this.right;
   }
 

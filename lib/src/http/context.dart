@@ -82,6 +82,9 @@ class Request {
   /// The raw [HttpRequest].
   HttpRequest get raw => this._raw;
 
+  /// The [HttpHeaders] of the current [RequestContext] from the request.
+  HttpHeaders get headers => this._raw.headers;
+
   /// A [Map] of the path parameters.
   Map<String, String> get pathParameters => this._pathParameters;
 
@@ -119,7 +122,7 @@ class Response {
   /// The raw [HttpResponse].
   HttpResponse get raw => this._raw;
 
-  /// The [HttpHeaders] of the current [RequestContext].
+  /// The [HttpHeaders] of the current [RequestContext] to be sent in the response.
   HttpHeaders get headers => this._raw.headers;
 
   /// Sets the statusCode to be sent when [send] is called.
