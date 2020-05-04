@@ -5,7 +5,7 @@ A fast and flexible Microservice oriented HTTP server framework for dart.
 Add this to your package's pubspec.yaml file:
 ```yaml
 dependencies:
-  shade: ^0.1.3
+  shade: ^0.1.4
 ```
 ### Install it
 You can install packages from the command line:
