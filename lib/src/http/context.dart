@@ -141,14 +141,16 @@ class Response {
   ///
   /// Sets the `Content-Type` header to [ContentType.json].
   Future sendJson(Object jsonValue) {
-    return this.send(json.encode(jsonValue), ContentType.json);
+    this.headers.contentType = ContentType.json;
+    return this.send(json.encode(jsonValue));
   }
 
   /// Sends text response to the client.
   ///
   /// Sets the `Content-Type` header to [ContentType.text].
   Future sendText(String text) {
-    return this.send(text, ContentType.text);
+    this.headers.contentType = ContentType.text;
+    return this.send(text);
   }
 
   /// Sends HTML a file as a response to the client.
@@ -164,13 +166,9 @@ class Response {
   }
 
   /// Sends response to the client.
-  ///
-  /// Optional parameter [contentType] that will set the `Content-Type` header
-  /// in the response.
-  Future send([Object content, ContentType contentType]) {
-    if (contentType != null) {
-      this._raw.headers.contentType = contentType;
-    }
+  /// 
+  /// Optionally writes [content] in the response.
+  Future send([Object content]) {
     if (content != null) {
       this._raw.write(content);
     }
