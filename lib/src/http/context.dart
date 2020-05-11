@@ -167,11 +167,13 @@ class Response {
   ///
   /// Optional parameter [contentType] that will set the `Content-Type` header
   /// in the response.
-  Future send(Object content, [ContentType contentType]) {
+  Future send([Object content, ContentType contentType]) {
     if (contentType != null) {
       this._raw.headers.contentType = contentType;
     }
-    this._raw.write(content);
+    if (content != null) {
+      this._raw.write(content);
+    }
     return this._raw.close();
   }
 }
